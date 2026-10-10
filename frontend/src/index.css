@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@theme { --color-bg:#080B14; --color-surface:#111827; --color-primary:#6C63FF; --color-secondary:#00D4FF; --color-text:#F8FAFC; --color-muted:#94A3B8; }
+[data-theme="light"]{ --color-bg:#F8FAFC; --color-surface:#FFFFFF; --color-text:#0F172A; --color-muted:#475569; }
+input,select,button{color:inherit}
+html,body,#root{height:100%} body{background:var(--color-bg);color:var(--color-text);font-family:system-ui,sans-serif}
+.orb{width:11rem;height:11rem;border-radius:9999px;transition:transform .15s,box-shadow .4s;
+  background:radial-gradient(circle at 35% 30%,#00D4FF,#6C63FF 60%,#2a2570);box-shadow:0 0 60px #6C63FF55}
+.orb-idle{animation:float 5s ease-in-out infinite}
+.orb-listening{box-shadow:0 0 90px #00D4FF88;animation:pulse 1.2s ease-in-out infinite}
+.orb-thinking{animation:spin 1.6s linear infinite;background:conic-gradient(from 0deg,#6C63FF,#00D4FF,#6C63FF);box-shadow:0 0 70px #6C63FF88}
+.orb-speaking{box-shadow:0 0 90px #6C63FFaa;animation:pulse .8s ease-in-out infinite}
+.orb-error{background:radial-gradient(circle at 35% 30%,#fca5a5,#dc2626 65%,#450a0a);box-shadow:0 0 50px #dc262688;animation:shake .4s}
+@keyframes float{50%{transform:translateY(-10px)}} @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{transform:scale(1.08)}} @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.orb{animation:none!important}}

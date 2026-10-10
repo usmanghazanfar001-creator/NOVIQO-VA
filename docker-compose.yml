@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: noviqo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: noviqo
+    ports: ["127.0.0.1:5432:5432"]          # localhost only (handy for dev and backups)
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U noviqo"]
+      interval: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    environment:                              # these override .env
+      ENV: production
+      COOKIE_SECURE: "true"
+      DATABASE_URL: postgresql+asyncpg://noviqo:${POSTGRES_PASSWORD}@db:5432/noviqo
+      APP_URL: https://${DOMAIN:-localhost}
+      CORS_ORIGINS: https://${DOMAIN:-localhost}
+      FORWARDED_ALLOW_IPS: "*"                # safe only because the backend isn't published; only Caddy can reach it
+    depends_on:
+      db: { condition: service_healthy }
+    expose: ["8000"]
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    ports: ["80:80", "443:443"]
+    volumes: [caddy_data:/data]
+    depends_on: [backend]
+
+volumes:
+  pgdata: {}
+  caddy_data: {}

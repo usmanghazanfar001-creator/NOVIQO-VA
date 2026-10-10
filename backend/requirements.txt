@@ -1,0 +1,17 @@
+# Minimum versions only, so pip picks releases that have wheels for your Python (3.12 - 3.14+).
+# requirements.lock is the exact, tested set (used by the Docker image).
+fastapi>=0.115
+uvicorn[standard]>=0.32
+httpx>=0.27
+pydantic>=2.10
+python-dotenv>=1.0
+slowapi>=0.1.9
+sqlalchemy[asyncio]>=2.0.36
+asyncpg>=0.31
+aiosqlite>=0.20
+argon2-cffi>=23.1
+pyjwt>=2.9
+cryptography>=42
+prometheus-client>=0.20
+sentry-sdk>=2
+tzdata
